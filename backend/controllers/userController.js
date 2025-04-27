@@ -1,6 +1,7 @@
 import { hashedPassword, matchPassword } from "../helper/passwordHelper.js";
 import { loginSchema, registerSchema } from "../validations/userValidations.js";
 import userModel from "../models/userModel.js"
+import jwt from "jsonwebtoken"
 
 export const register = async (req, res) => {
     try {

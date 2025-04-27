@@ -10,11 +10,7 @@ const postSchema = new mongoose.Schema({
         require:true,
         unique:true
     },
-    shortDescription:{
-        type:String,
-        required:true,
-    },
-    description:{
+    text:{
         type:String,
         required:true,
     },
@@ -37,6 +33,16 @@ const postSchema = new mongoose.Schema({
         type:Boolean,
         required:true,
         default:true,
+    },
+    views:{
+        type:Number,
+        required:true,
+        default:0,
+    },
+    likes:{
+        type:Number,
+        required:true,
+        default:0,
     }
 },{timestamps:true})
 
