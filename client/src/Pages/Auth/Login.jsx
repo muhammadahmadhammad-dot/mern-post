@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { login } from "../../features/auth/authSlice";
+import { changeAuth, login } from "../../features/auth/authSlice";
 // import { login } from "../features/auth/authSlice.js"
 
 export default function Login() {
@@ -31,6 +31,7 @@ export default function Login() {
         console.log(response)
               if (response.success) {
                 toast.success(response.message,{autoClose:2000})
+                dispatch(changeAuth(true))
                 navigate('/')
               }else{
                 if (response.validateErrors) {

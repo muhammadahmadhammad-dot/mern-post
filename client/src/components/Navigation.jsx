@@ -66,7 +66,7 @@ const Navigation = ({
 
                   {useSelector(
                     (state) =>
-                      state.user && (
+                      state.isAuth && (
                         <NavigationMenuItem to="/my-posts">
                           <NavigationMenuLink
                             href="/my-posts"
@@ -83,7 +83,7 @@ const Navigation = ({
           </div>
           <div className="flex gap-2">
             {useSelector((state) =>
-              state.user ? (
+              state.isAuth ? (
                 <Button onClick={handleLogout}>LOGOUT</Button>
               ) : (
                 <>
@@ -131,7 +131,7 @@ const Navigation = ({
                     </Link>
                     {useSelector(
                       (state) =>
-                        state.user && (
+                        state.isAuth && (
                           <Link
                             to="/my-posts"
                             className="text-md font-semibold"
@@ -144,7 +144,7 @@ const Navigation = ({
 
                   <div className="flex flex-col gap-3">
                     {useSelector((state) =>
-                      state.user ? (
+                      state.isAuth ? (
                         <Button onClick={handleLogout}>
                           {auth.logout.title}
                         </Button>

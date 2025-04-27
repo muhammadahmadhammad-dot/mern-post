@@ -1,15 +1,17 @@
 import jwt from "jsonwebtoken";
-
+import userModel from "../models/userModel.js"
 const authMiddleware = async (req, res, next) => {
   try {
     const authorization = req.headers.authorization;
+    console.log(req.headers)
     if (!authorization || !authorization.startsWith("Bearer ")) {
       return res
         .status(401)
         .send({ success: false, message: "Not Authenticated" });
     }
     const token = authorization.split(" ")[1]; // extract token
-    jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
+     
       if (err) {
         return res
           .status(401)

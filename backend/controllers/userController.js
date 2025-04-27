@@ -40,7 +40,8 @@ export const login = async (req, res) => {
             return res.status(404).send({success:false,message:'Not Found.'})
         }
 
-        const isMatched = matchPassword(password, user.password)
+        const isMatched = await matchPassword(password, user.password)
+        console.log(isMatched)
         if(!isMatched){
             return res.status(401).send({success:false,message:'Invalid Credentials.'})
         }

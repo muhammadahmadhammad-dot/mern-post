@@ -2,10 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService.js'
 
 const initialState = {
-  user:  window.localStorage.getItem("auth") ? JSON.parse(window.localStorage.getItem("auth")) : null,
+  user:  window.localStorage.getItem("auth") ? JSON.parse(window.localStorage.getItem("auth")) : '',
   status: '',
-  token: window.localStorage.getItem("token") ? JSON.parse(window.localStorage.getItem("token")) : null,
+  token: window.localStorage.getItem("token") ? JSON.parse(window.localStorage.getItem("token")) : '',
   error:null,
+  isAuth: window.localStorage.getItem("auth") ? true : false
 }
 
 // this function use in loginPage
@@ -24,7 +25,11 @@ export const authSlice = createSlice({
     logout: (state, action)=>{
       state.token=""
       state.user=""
+      state.isAuth=false
   },
+  changeAuth:(state, action)=>{
+    state.isAuth = action.payload;
+  }
    
   },
   extraReducers:(builder)=>{
@@ -40,6 +45,6 @@ export const authSlice = createSlice({
   }
 })
 
-export const { logout } = authSlice.actions
+export const { logout,changeAuth } = authSlice.actions
 
 export default authSlice.reducer
