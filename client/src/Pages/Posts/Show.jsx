@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import moment from "moment"
 import {
   Card,
@@ -10,8 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { toast } from "react-toastify";
 
 const Show = () => {
+  const navigate = useNavigate();
       const { id } = useParams();
       const [post, setPost] = useState([]);
       const fetchData = (id) => {
@@ -25,6 +27,8 @@ const Show = () => {
           })
           .catch((error) => {
             console.log(error?.response?.data);
+            toast.error(error?.response?.data?.message)
+            navigate('/')
           });
       };
       useEffect(() => {
@@ -37,7 +41,6 @@ const Show = () => {
             <CardDescription>
               <Card>
                 <CardHeader>
-                  <CardTitle>{post.title}</CardTitle>
                   <CardDescription>
                     By {post.author?.name} on {moment(post.createdAt).fromNow()}
                   </CardDescription>

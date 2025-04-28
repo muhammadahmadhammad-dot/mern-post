@@ -3,7 +3,6 @@ import userModel from "../models/userModel.js"
 const authMiddleware = async (req, res, next) => {
   try {
     const authorization = req.headers.authorization;
-    console.log(req.headers)
     if (!authorization || !authorization.startsWith("Bearer ")) {
       return res
         .status(401)

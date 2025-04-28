@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home,Show, List,Create, Login, Register, AuthorShow } from "./Pages";
+import { Home,Show, List,Create, Login, Register, AuthorShow, Edit } from "./Pages";
 import AppLayout from "./Pages/Layouts/AppLayout.jsx";
 import PrivateComponent from "./components/PrivateComponent.jsx";
 
@@ -33,6 +33,14 @@ function App() {
             element={
               <PrivateComponent>
                 <AuthorShow />
+              </PrivateComponent>
+            }
+          />
+          <Route
+            path="/my-posts/edit/:id"
+            element={
+              <PrivateComponent>
+                <Edit />
               </PrivateComponent>
             }
           />

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { CreatePostForm } from "../../components/create-post-form";
+import { PostForm } from "../../components/post-form";
 import { toast } from "react-toastify";
 
 const Create = () => {
@@ -45,7 +45,8 @@ const Create = () => {
   };
   return (
     <div class="w-11/12 mx-auto mt-6">
-      <CreatePostForm
+      <PostForm
+           edit={false}
         errors={errors}
         handelSubmit={handelSubmit}
         inputs={inputs}

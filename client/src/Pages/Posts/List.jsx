@@ -90,7 +90,13 @@ const List = () => {
                     <Badge variant="outline">{post.views}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button>Action</Button>
+                    <Link to={`/my-posts/${post._id}`}>
+                      <Button variant="outline">View</Button>
+                    </Link>
+                    <Link to={`/my-posts/edit/${post._id}`}>
+                      <Button >Edit</Button>
+                    </Link>
+                    <Button variant="destructive">Delete</Button>
                   </TableCell>
                 </TableRow>
               ))}

@@ -5,7 +5,8 @@ import List from "./Posts/List.jsx"
 import Create from "./Posts/Create.jsx"
 import AuthorShow from "./Posts/ShowForAuthor.jsx"
 import Show from "./Posts/Show.jsx"
+import Edit from "./Posts/Edit.jsx"
 
 
 
-export {Login, Register, Home,Create,Show, List,AuthorShow}
+export {Login,Edit, Register, Home,Create,Show, List,AuthorShow}

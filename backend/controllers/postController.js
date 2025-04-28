@@ -1,6 +1,6 @@
 
 import postModel from "../models/postModel.js";
-import { postCreateSchema } from "../validations/postValidations.js";
+import { postCreateSchema, postUpdateSchema } from "../validations/postValidations.js";
 
 export const index = async (req, res) => {
   try {
@@ -35,7 +35,10 @@ export const display = async (req, res) => {
     const post = await postModel
       .findOne({ _id: req.params.id, status: true })
       .populate("author",'name');
-      console.log(req.params.id)
+      if(!post){
+        return res.status(404)
+              .send({ success: false, message: "Not Found."});
+      }
     return res
       .status(200)
       .send({ success: true, message: "Specfic post.", post });
@@ -48,7 +51,7 @@ export const display = async (req, res) => {
 };
 export const show = async (req, res) => {
   try {
-    const post = await postModel.findOne({ _id: req.id });
+    const post = await postModel.findOne({ _id: req.params.id });
     return res
       .status(200)
       .send({ success: true, message: "Specfic post for author.", post });
@@ -88,5 +91,43 @@ export const store = async (req, res) => {
       .send({ success: false, message: `Error : ${error}` });
   }
 };
-export const update = (req, res) => {};
+export const update =async (req, res) => {
+  try {
+    const id = req.params.id
+    const userId = req.user.id
+    const { data, error } = postUpdateSchema.safeParse(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .send({
+          success: false,
+          message: "Validation error!",
+          validateErrors: error.format(),
+        });
+    }
+
+    const { text,status } = data;
+    console.log(status)
+    const findPost = await postModel.findOne({_id:id});
+    if(!findPost){
+      return res.status(404)
+      .send({ success: false, message: "Not found" });
+    }
+    if(userId != findPost.author.toString()){
+      return res.status(400)
+      .send({ success: false, message: "You are not authorized to perform this action." });
+    }
+
+
+    const post = await postModel.findOneAndUpdate({_id:id, author:userId},{ text,status },{ new: true });
+    return res
+      .status(201)
+      .send({ success: true, message: "Post created successfully.", post });
+  } catch (error) {
+    console.log("Post store controller error : " + error);
+    return res
+      .status(400)
+      .send({ success: false, message: `Error : ${error}` });
+  }
+};
 export const deletePost = (req, res) => {};

@@ -9,10 +9,18 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 
-export function CreatePostForm({
+export function PostForm({
   className,
+  edit=false,
   errors = {},
   handelSubmit = () => {},
   inputs = {},
@@ -23,9 +31,9 @@ export function CreatePostForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Create</CardTitle>
+          <CardTitle className="text-2xl">{edit ? 'Edit' : 'Create '}</CardTitle>
           <CardDescription>
-            Create New Post
+            {edit ? 'Edit' : 'Create New'} Post
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -47,7 +55,30 @@ export function CreatePostForm({
                   <p className="text-red-500">{errors?.text._errors[0]}</p>
                 )}
               </div>
-              <Button type="submit" className="w-full">
+              {
+                edit && <div className="grid gap-2">
+                <Label htmlFor="Text">Status</Label>
+                <Select name="status" required
+                value={inputs.status.toString()}
+                onValueChange={(value)=>handelChange({target:{name:'status',value}})}
+                  >
+  <SelectTrigger >
+    <SelectValue placeholder="Select --" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem   value="true">Active</SelectItem>
+    <SelectItem value="false">In Active</SelectItem>
+  </SelectContent>
+</Select>
+
+
+                
+                {errors?.status && (
+                  <p className="text-red-500">{errors?.status._errors[0]}</p>
+                )}
+              </div>
+              }
+              <Button type="submit"  className="w-full">
                 Post
               </Button>
             </div>
