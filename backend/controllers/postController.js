@@ -1,4 +1,5 @@
 
+import increasePostView from "../helper/increasePostView.js";
 import postModel from "../models/postModel.js";
 import { postCreateSchema, postUpdateSchema } from "../validations/postValidations.js";
 
@@ -39,6 +40,7 @@ export const display = async (req, res) => {
         return res.status(404)
               .send({ success: false, message: "Not Found."});
       }
+      await increasePostView(post); // increase post Views
     return res
       .status(200)
       .send({ success: true, message: "Specfic post.", post });
@@ -151,6 +153,48 @@ export const deletePost = async (req, res) => {
       .send({ success: true, message: "Post deleted successfully.", post });
   } catch (error) {
     console.log("Post deletePost controller error : " + error);
+    return res
+      .status(400)
+      .send({ success: false, message: `Error : ${error}` });
+  }
+};
+export const likePost = async (req, res) => {
+  try {
+    const id = req.params.id
+    const userId = req.user.id
+
+    const findPost = await postModel.findOne({_id:id,status:true});
+    if(!findPost){
+      return res.status(404)
+      .send({ success: false, message: "Not found" });
+    }
+    // .some() returns true/false directly
+    const  alreadyLiked=  findPost.likes?.some((like) => like.user.toString() == userId)
+    if(alreadyLiked){
+      const post = await postModel.findByIdAndUpdate(id,{
+        $pull: {
+          likes: { user: userId }
+        }
+      },{new:true});
+      return res
+      .status(200)
+      .send({ success: true, message: "Remove your post Like", post });
+    }else{
+      const post = await postModel.findByIdAndUpdate(id,{
+        $push: {
+          likes: {
+            user: userId,
+            type: 1, // if i worked on multiple reaction the i can use 1 for like 2 for love
+          }
+        }
+      },{new:true});
+      return res
+        .status(200)
+        .send({ success: true, message: "Post Like increase successfully.", post });
+    }
+
+  } catch (error) {
+    console.log("Post likePost controller error : " + error);
     return res
       .status(400)
       .send({ success: false, message: `Error : ${error}` });

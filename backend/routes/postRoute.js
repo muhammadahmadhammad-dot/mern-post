@@ -1,5 +1,5 @@
 import express from "express";
-import { deletePost,myPosts, display, index, show, store, update } from "../controllers/postController.js";
+import { deletePost,myPosts,likePost, display, index, show, store, update } from "../controllers/postController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import fileHelper from "../helper/fileHelper.js";
 
@@ -11,6 +11,7 @@ postRouter.get('/my-posts',authMiddleware,myPosts);
 postRouter.get('/show/:id',authMiddleware,show);
 postRouter.post('/create',authMiddleware,store);
 postRouter.put('/update/:id',authMiddleware,update);
+postRouter.post('/update-like/:id',authMiddleware,likePost);
 postRouter.delete('/delete/:id',authMiddleware, deletePost);
 
 export default postRouter

@@ -21,11 +21,20 @@ const postSchema = new mongoose.Schema({
         required:true,
         default:0,
     },
-    likes:{
-        type:Number,
-        required:true,
-        default:0,
-    }
+    likes:[
+        {
+            user:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"User",
+                required:false,
+            },
+            type:{
+                type:Number,
+                required:true,
+                default:0,
+            }
+        }
+    ]
 },{timestamps:true})
 
 export default mongoose.model("Post",postSchema)

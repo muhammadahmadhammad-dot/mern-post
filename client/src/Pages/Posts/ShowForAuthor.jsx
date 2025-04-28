@@ -55,15 +55,15 @@ const ShowForAuthor = () => {
               <p>{post.text}</p>
             </CardContent>
             <CardFooter>
-              <p>Likes : {post.likes}</p>
-              <p>
-                Status :{" "}
-                {post.status ? (
-                  <Badge>Active</Badge>
-                ) : (
-                  <Badge variant="destructive">In Active</Badge>
-                )}
-              </p>
+                  
+                <p>Likes :  <Badge>{post.likes} </Badge> <br />
+                  Status :
+                    {post.status ? (
+                      <Badge>Active</Badge>
+                    ) : (
+                      <Badge variant="destructive">In Active</Badge>
+                    )}
+                </p> 
             </CardFooter>
           </Card>
         </CardDescription>
