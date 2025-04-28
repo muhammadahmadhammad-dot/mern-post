@@ -107,7 +107,6 @@ export const update =async (req, res) => {
     }
 
     const { text,status } = data;
-    console.log(status)
     const findPost = await postModel.findOne({_id:id});
     if(!findPost){
       return res.status(404)
@@ -122,12 +121,38 @@ export const update =async (req, res) => {
     const post = await postModel.findOneAndUpdate({_id:id, author:userId},{ text,status },{ new: true });
     return res
       .status(201)
-      .send({ success: true, message: "Post created successfully.", post });
+      .send({ success: true, message: "Post updated successfully.", post });
   } catch (error) {
-    console.log("Post store controller error : " + error);
+    console.log("Post update controller error : " + error);
     return res
       .status(400)
       .send({ success: false, message: `Error : ${error}` });
   }
 };
-export const deletePost = (req, res) => {};
+export const deletePost = async (req, res) => {
+  try {
+    const id = req.params.id
+    const userId = req.user.id
+
+    const findPost = await postModel.findOne({_id:id});
+    if(!findPost){
+      return res.status(404)
+      .send({ success: false, message: "Not found" });
+    }
+    if(userId != findPost.author.toString()){
+      return res.status(400)
+      .send({ success: false, message: "You are not authorized to perform this action." });
+    }
+
+
+    const post = await postModel.findOneAndDelete({_id:id, author:userId});
+    return res
+      .status(200)
+      .send({ success: true, message: "Post deleted successfully.", post });
+  } catch (error) {
+    console.log("Post deletePost controller error : " + error);
+    return res
+      .status(400)
+      .send({ success: false, message: `Error : ${error}` });
+  }
+};
