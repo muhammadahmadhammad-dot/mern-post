@@ -22,6 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import {Link} from "react-router-dom"
 import axios from "axios";
+import { toast } from "react-toastify";
 const List = () => {
   const [posts, setPosts] = useState([]);
   const fetchData = () => {
@@ -36,6 +37,26 @@ const List = () => {
       .then((response) => {
         if (response.data.success) {
           setPosts(response.data.posts);
+          console.log(response.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error?.response?.data);
+      });
+  };
+  const deletePost = (id) => {
+    const token = JSON.parse(localStorage.getItem("token")) || null;
+    axios
+      .delete(
+        `${import.meta.env.VITE_API_BASE_URL}/posts/delete/${id}`,
+        {headers:{
+          Authorization: `Bearer ${token}`,
+        }}
+      )
+      .then((response) => {
+        if (response.data.success) {
+          setPosts((prev) => (prev.filter((item)=>(item._id != id))));
+          toast.success(response.data.message)
           console.log(response.data);
         }
       })
@@ -96,7 +117,7 @@ const List = () => {
                     <Link to={`/my-posts/edit/${post._id}`}>
                       <Button >Edit</Button>
                     </Link>
-                    <Button variant="destructive">Delete</Button>
+                    <Button variant="destructive" onClick={()=>(deletePost(post._id))}>Delete</Button>
                   </TableCell>
                 </TableRow>
               ))}
