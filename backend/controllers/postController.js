@@ -1,5 +1,5 @@
 
-import increasePostView from "../helper/increasePostView.js";
+
 import postModel from "../models/postModel.js";
 import { postCreateSchema, postUpdateSchema } from "../validations/postValidations.js";
 
@@ -33,14 +33,17 @@ export const myPosts = async (req, res) => {
 };
 export const display = async (req, res) => {
   try {
-    const post = await postModel
-      .findOne({ _id: req.params.id, status: true })
-      .populate("author",'name');
+    const post =  await postModel
+    .findOneAndUpdate(
+      { _id: req.params.id, status: true },
+      { $inc: { views: 1 } }, // Increment the views by 1
+      { new: true } 
+    )
+    .populate("author", "name");;
       if(!post){
         return res.status(404)
               .send({ success: false, message: "Not Found."});
       }
-      await increasePostView(post); // increase post Views
     return res
       .status(200)
       .send({ success: true, message: "Specfic post.", post });
