@@ -1,6 +1,22 @@
 import {addCommentSchema} from "../validations/commentValidations.js"
 import commentModel from "../models/commentModel.js"
 
+export const index =async (req, res) => {
+  try {
+    const postId = req.params.postId; 
+     const comments = await commentModel.find({post:postId}).populate("user",'name');
+        return res
+          .status(200)
+          .send({ success: true, message: "All comments.", comments });
+  } catch (error) {
+    console.log("comment index controller error : " + error);
+    return res
+      .status(400)
+      .send({ success: false, message: `Error : ${error}` });
+  
+    
+  }
+} 
 export const addComment = async (req,res) => {
      try {
         const { data, error } = addCommentSchema.safeParse(req.body);
@@ -14,17 +30,13 @@ export const addComment = async (req,res) => {
             });
         }
     
-        const { text } = data;
+        const { text,postId,commentId } = data;
         const userId = req.user.id
-        const postId = req.params.id
 
-        if(req.body.commentId){
-            const comment = await commentModel.create({ user:userId, post:postId, comment:commentId,text });
-        }else{
-            const comment = await commentModel.create({ user:userId, post:postId, text });
-        }
-    
-    
+
+        const replyCommentId= commentId || null;
+        const comment = await commentModel.create({ user:userId, post:postId, comment:replyCommentId,text });
+       
         return res
           .status(201)
           .send({ success: true, message: "comment created successfully.", comment });

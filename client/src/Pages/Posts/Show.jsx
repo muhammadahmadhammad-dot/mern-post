@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "react-toastify";
+import Comment from "./Comment/Comment.jsx";
 
 const Show = () => {
   const navigate = useNavigate();
@@ -18,11 +19,11 @@ const Show = () => {
       const [post, setPost] = useState([]);
       
       useEffect(() => {
-        const abortController = new AbortController();
-        const signal = abortController.signal;
+        // const abortController = new AbortController();
+        // const signal = abortController.signal;
         const fetchData = (id) => {
           axios
-            .get(`${import.meta.env.VITE_API_BASE_URL}/posts/show-single/${id}`,{signal:signal})
+            .get(`${import.meta.env.VITE_API_BASE_URL}/posts/show-single/${id}`)
             .then((response) => {
               if (response.data.success) {
                 setPost(response.data.post);
@@ -37,11 +38,11 @@ const Show = () => {
         };
         fetchData(id);
 
-        return () =>{
-          abortController.abort()
-        }
+        // return () =>{
+        //   abortController.abort()
+        // }
       }, [id,navigate]);
-  return (
+      return (
     <Card>
           <CardHeader>
             <CardTitle>Post</CardTitle>
@@ -56,8 +57,11 @@ const Show = () => {
                   <p>{post.text}</p>
                 </CardContent>
                 <CardFooter>
-                  <p>Likes : {post.likes}</p>
+                  <p>Likes : {post.likes?.length || 0}</p>
                 </CardFooter>
+                <CardDescription>
+                  <Comment postId={post._id}/>
+                </CardDescription>
               </Card>
             </CardDescription>
           </CardHeader>
