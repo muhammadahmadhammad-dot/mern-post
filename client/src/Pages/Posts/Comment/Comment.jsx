@@ -21,6 +21,7 @@ const Comment = ({ postId = null }) => {
   const [replyComments, setReplyComments] = useState([]);
   const [replyInputs, setReplyInputs] = useState({});
   const [token, setToken] = useState(false);
+  const [user, setUser] = useState({});
   const [inputs, setInputs] = useState({
     text: "",
     postId: "",
@@ -138,6 +139,8 @@ const Comment = ({ postId = null }) => {
     setInputs((prev) => ({ ...prev, postId }));
     const token = JSON.parse(localStorage.getItem("token")) || null;
     setToken(token);
+    const user = JSON.parse(localStorage.getItem("auth")) || null;
+    setUser(user?.user);
   }, [postId]);
   return (
     <Card>
@@ -177,7 +180,7 @@ const Comment = ({ postId = null }) => {
                     Posted by {comment.user?.name} on{" "}
                     {moment(comment.createdAt).fromNow()}
                   </div>
-                  {token && (
+                  { user._id == comment?.user?._id ? (
                     <div>
                       <Button
                         variant="destructive"
@@ -186,7 +189,7 @@ const Comment = ({ postId = null }) => {
                         Delete
                       </Button>
                     </div>
-                  )}
+                  ) : ''}
                 </div>
               </CardTitle>
             </CardHeader>
@@ -227,7 +230,7 @@ const Comment = ({ postId = null }) => {
                           Posted by {reply.user?.name} on{" "}
                           {moment(reply.createdAt).fromNow()}
                         </div>
-                        {token && (
+                        {user._id == reply?.user?._id ? (
                           <div>
                             <Button
                               variant="destructive"
@@ -236,7 +239,7 @@ const Comment = ({ postId = null }) => {
                               Delete
                             </Button>
                           </div>
-                        )}
+                        ) : ''}
                       </div>
                     </CardTitle>
                   </CardHeader>
